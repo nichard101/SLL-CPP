@@ -22,25 +22,6 @@ public:
 SLLNode* head = NULL;
 int size = 0;
 
-void remove(int index) {
-    if (head == NULL || index < 0 || index >= size) {
-        return;
-    }
-
-    if (index == 0) {
-        head = head->next;
-    }
-    else {
-        int i = 1;
-        SLLNode* temp = head;
-        while (i < index) {
-            temp = temp->next;
-        }
-        temp->next = temp->next->next;
-    }
-
-}
-
 void add(std::string data) {
     SLLNode* newNode = new SLLNode(data);
 
@@ -69,17 +50,47 @@ void insert(std::string data, int index) {
         size = 1;
     }
     else {
-        int i = 1;
-        SLLNode* temp = head;
-        while (i < index) {
-            temp = temp->next;
+        if (index == 0) {
+            newNode->next = head;
+            head = newNode;
         }
-        newNode->next = temp->next;
-        temp->next = newNode;
+        else {
+            int i = 1;
+            SLLNode* temp = head;
+            while (i < index) {
+                temp = temp->next;
+                i++;
+            }
+            newNode->next = temp->next;
+            temp->next = newNode;
+        }
+        size++;
+    }
+}
+
+void remove(int index) {
+    if (head == NULL || index < 0 || index >= size) {
+        return;
+    }
+
+    if (index == 0) {
+        head = head->next;
+    }
+    else {
+        int i = 0;
+        SLLNode* temp = head;
+        while (i < index-1) {
+            //std::cout << "TEST " << temp->data << std::endl;
+            temp = temp->next;
+            i++;
+        }
+        temp->next = temp->next->next;
+        size--;
     }
 }
 
 void print() {
+    std::cout << "LIST SIZE: " << size << std::endl;
     SLLNode* temp = head;
     while (temp != NULL) {
         std::cout << temp->data << std::endl;
@@ -96,17 +107,27 @@ int main()
     add("Four");
     add("Five");
 
+
+    print();
+
     insert("Six", 1);
 
     print();
 
-    remove(1);
+    remove(2);
+
     print();
 
-    remove(0);
+    remove(4);
+
     print();
 
-    remove(7);
+    insert("Zero", 0);
+
+    print();
+
+    insert("Ten", 4);
+
     print();
 }
 
